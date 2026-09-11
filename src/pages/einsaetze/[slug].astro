@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const einsaetze = await getCollection('einsaetze');
+  return einsaetze.map((einsatz) => ({
+    params: { slug: einsatz.slug },
+    props: { einsatz },
+  }));
+}
+
+const { einsatz } = Astro.props;
+const { Content } = await einsatz.render();
+
+const formatted = einsatz.data.datum.toLocaleDateString('de-AT', {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
+});
+
+const artFarben: Record<string, string> = {
+  Brand: 'bg-feuerrot text-white',
+  Technisch: 'bg-graphit text-white',
+  Sturmschaden: 'bg-amber-600 text-white',
+  Verkehrsunfall: 'bg-slate-700 text-white',
+  Sonstiges: 'bg-slate-400 text-white',
+};
+---
+<BaseLayout title={einsatz.data.title} description={einsatz.data.beschreibung.slice(0, 150)}>
+  <article class="max-w-3xl mx-auto px-4 py-16">
+    <a href="/einsaetze" class="text-sm text-graphit/60 hover:text-feuerrot">← Zurück zur Übersicht</a>
+
+    <div class="mt-4 flex items-center gap-3">
+      <span class:list={['text-xs font-semibold px-2 py-1 rounded-sm', artFarben[einsatz.data.einsatzart] ?? artFarben.Sonstiges]}>
+        {einsatz.data.einsatzart}
+      </span>
+      <time class="text-sm text-graphit/60">{formatted}</time>
+    </div>
+
+    <h1 class="font-display text-4xl md:text-5xl mt-3 mb-6 leading-tight">{einsatz.data.title}</h1>
+
+    {einsatz.data.beitragsbild && (
+      <img src={einsatz.data.beitragsbild} alt="" class="w-full aspect-[16/9] object-cover rounded-sm mb-8" />
+    )}
+
+    <div class="prose prose-graphit max-w-none prose-headings:font-display">
+      <Content />
+    </div>
+
+    {einsatz.data.fahrzeuge.length > 0 && (
+      <div class="mt-10 border-t border-graphit/10 pt-6">
+        <h2 class="font-display text-xl mb-3">Eingesetzte Fahrzeuge</h2>
+        <ul class="flex flex-wrap gap-2">
+          {einsatz.data.fahrzeuge.map((fahrzeug) => (
+            <li class="text-sm bg-graphit/5 px-3 py-1 rounded-sm">{fahrzeug}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {einsatz.data.bilder.length > 0 && (
+      <div class="mt-10 grid gap-4 sm:grid-cols-2">
+        {einsatz.data.bilder.map((bild) => (
+          <img src={bild} alt="" class="w-full aspect-[4/3] object-cover rounded-sm" />
+        ))}
+      </div>
+    )}
+  </article>
+</BaseLayout>

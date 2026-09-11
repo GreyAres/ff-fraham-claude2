@@ -1,0 +1,76 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Netlify Identity Widget übernimmt den Login,
+# Git Gateway übernimmt die Schreibrechte auf das Repository.
+
+publish_mode: editorial_workflow
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+locale: "de"
+
+collections:
+  - name: "einsaetze"
+    label: "Einsätze"
+    label_singular: "Einsatz"
+    folder: "src/content/einsaetze"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    identifier_field: title
+    summary: "{{title}} – {{datum}}"
+    sortable_fields: ["datum", "title", "einsatzart"]
+    fields:
+      - { label: "Titel", name: "title", widget: "string" }
+      - { label: "Datum", name: "datum", widget: "datetime", format: "YYYY-MM-DD", date_format: "DD.MM.YYYY", time_format: false, picker_utc: true }
+      - label: "Einsatzart"
+        name: "einsatzart"
+        widget: "select"
+        options: ["Brand", "Technisch", "Sturmschaden", "Verkehrsunfall", "Sonstiges"]
+      - { label: "Beschreibung", name: "beschreibung", widget: "text" }
+      - label: "Eingesetzte Fahrzeuge"
+        name: "fahrzeuge"
+        widget: "list"
+        required: false
+        default: []
+      - { label: "Beitragsbild", name: "beitragsbild", widget: "image", required: false }
+      - label: "Weitere Bilder"
+        name: "bilder"
+        widget: "list"
+        required: false
+        default: []
+        field: { label: "Bild", name: "bild", widget: "image" }
+
+  - name: "news"
+    label: "News & Veranstaltungen"
+    label_singular: "Beitrag"
+    folder: "src/content/news"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    identifier_field: title
+    summary: "{{title}} – {{datum}}"
+    sortable_fields: ["datum", "title"]
+    fields:
+      - { label: "Titel", name: "title", widget: "string" }
+      - { label: "Datum", name: "datum", widget: "datetime", format: "YYYY-MM-DD", date_format: "DD.MM.YYYY", time_format: false, picker_utc: true }
+      - { label: "Beitragsbild", name: "beitragsbild", widget: "image", required: false }
+      - { label: "Text", name: "body", widget: "markdown" }
+
+  - name: "fuhrpark"
+    label: "Fuhrpark"
+    label_singular: "Fahrzeug"
+    folder: "src/content/fuhrpark"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: fahrzeugname
+    summary: "{{fahrzeugname}} ({{funkrufname}})"
+    sortable_fields: ["reihenfolge", "fahrzeugname", "baujahr"]
+    fields:
+      - { label: "Fahrzeugname", name: "fahrzeugname", widget: "string" }
+      - { label: "Funkrufname", name: "funkrufname", widget: "string" }
+      - { label: "Baujahr", name: "baujahr", widget: "number", value_type: "int" }
+      - { label: "Beschreibung", name: "beschreibung", widget: "text" }
+      - { label: "Foto", name: "foto", widget: "image", required: false }
+      - { label: "Reihenfolge", name: "reihenfolge", widget: "number", value_type: "int", default: 99, hint: "Bestimmt die Sortierung in der Übersicht (aufsteigend)." }

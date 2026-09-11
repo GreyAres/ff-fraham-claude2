@@ -1,0 +1,43 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  datum: Date;
+  einsatzart: string;
+  beitragsbild?: string;
+}
+const { slug, title, datum, einsatzart, beitragsbild } = Astro.props;
+
+const artFarben: Record<string, string> = {
+  Brand: 'bg-feuerrot text-white',
+  Technisch: 'bg-graphit text-white',
+  Sturmschaden: 'bg-amber-600 text-white',
+  Verkehrsunfall: 'bg-slate-700 text-white',
+  Sonstiges: 'bg-slate-400 text-white',
+};
+
+const formatted = datum.toLocaleDateString('de-AT', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+});
+---
+<a
+  href={`/einsaetze/${slug}`}
+  class="group block border border-graphit/10 rounded-sm overflow-hidden hover:border-feuerrot transition-colors"
+>
+  <div class="relative aspect-[16/9] bg-graphit/5 overflow-hidden">
+    {beitragsbild ? (
+      <img src={beitragsbild} alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+    ) : (
+      <div class="w-full h-full flex items-center justify-center text-graphit/20 font-display text-4xl">FF</div>
+    )}
+    <span class:list={['absolute top-3 left-3 text-xs font-semibold px-2 py-1 rounded-sm', artFarben[einsatzart] ?? artFarben.Sonstiges]}>
+      {einsatzart}
+    </span>
+  </div>
+  <div class="p-4">
+    <p class="text-xs text-graphit/60 mb-1">{formatted}</p>
+    <h3 class="font-display text-xl leading-tight group-hover:text-feuerrot transition-colors">{title}</h3>
+  </div>
+</a>

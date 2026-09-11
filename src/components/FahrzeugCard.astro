@@ -1,0 +1,25 @@
+---
+interface Props {
+  fahrzeugname: string;
+  funkrufname: string;
+  baujahr: number;
+  beschreibung: string;
+  foto?: string;
+}
+const { fahrzeugname, funkrufname, baujahr, beschreibung, foto } = Astro.props;
+---
+<article class="border border-graphit/10 rounded-sm overflow-hidden flex flex-col">
+  <div class="aspect-[4/3] bg-graphit/5 flex items-center justify-center overflow-hidden">
+    {foto ? (
+      <img src={foto} alt={fahrzeugname} class="w-full h-full object-cover" />
+    ) : (
+      <span class="font-display text-5xl text-graphit/15">FF</span>
+    )}
+  </div>
+  <div class="p-5 flex-1 flex flex-col">
+    <p class="text-xs font-semibold text-feuerrot uppercase tracking-wide mb-1">{funkrufname}</p>
+    <h3 class="font-display text-2xl leading-tight mb-1">{fahrzeugname}</h3>
+    <p class="text-sm text-graphit/60 mb-3">Baujahr {baujahr}</p>
+    <p class="text-sm leading-relaxed text-graphit/80">{beschreibung}</p>
+  </div>
+</article>

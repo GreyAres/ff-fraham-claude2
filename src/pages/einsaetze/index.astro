@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import EinsatzCard from '../../components/EinsatzCard.astro';
+import { getCollection } from 'astro:content';
+
+const alleEinsaetze = (await getCollection('einsaetze')).sort(
+  (a, b) => b.data.datum.valueOf() - a.data.datum.valueOf()
+);
+
+const jahre = [...new Set(alleEinsaetze.map((e) => e.data.datum.getFullYear()))].sort(
+  (a, b) => b - a
+);
+---
+<BaseLayout title="Einsätze" description="Übersicht aller Einsätze der Freiwilligen Feuerwehr Fraham.">
+  <section class="max-w-6xl mx-auto px-4 py-16">
+    <h1 class="font-display text-4xl md:text-5xl mb-2">Einsätze</h1>
+    <p class="text-graphit/70 mb-8 max-w-2xl">
+      Eine Übersicht unserer Einsätze der letzten Jahre. Wähle ein Jahr, um die Liste zu filtern.
+    </p>
+
+    <div class="flex flex-wrap gap-2 mb-10" role="group" aria-label="Nach Jahr filtern">
+      <button data-jahr="alle" class="jahr-filter is-active px-4 py-2 rounded-sm border border-graphit/20 font-display text-lg">
+        Alle
+      </button>
+      {jahre.map((jahr) => (
+        <button data-jahr={jahr} class="jahr-filter px-4 py-2 rounded-sm border border-graphit/20 font-display text-lg">
+          {jahr}
+        </button>
+      ))}
+    </div>
+
+    <div id="einsatz-grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {alleEinsaetze.map((einsatz) => (
+        <div class="einsatz-item" data-jahr={einsatz.data.datum.getFullYear()}>
+          <EinsatzCard
+            slug={einsatz.slug}
+            title={einsatz.data.title}
+            datum={einsatz.data.datum}
+            einsatzart={einsatz.data.einsatzart}
+            beitragsbild={einsatz.data.beitragsbild}
+          />
+        </div>
+      ))}
+    </div>
+
+    <p id="keine-treffer" class="hidden text-graphit/60 mt-8">
+      Für das gewählte Jahr sind keine Einsätze vorhanden.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .jahr-filter.is-active {
+    background-color: #D32F2F;
+    color: white;
+    border-color: #D32F2F;
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.jahr-filter');
+  const items = document.querySelectorAll<HTMLElement>('.einsatz-item');
+  const keineTreffer = document.getElementById('keine-treffer');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      buttons.forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      const jahr = btn.dataset.jahr;
+      let sichtbar = 0;
+      items.forEach((item) => {
+        const zeigen = jahr === 'alle' || item.dataset.jahr === jahr;
+        item.style.display = zeigen ? '' : 'none';
+        if (zeigen) sichtbar++;
+      });
+      keineTreffer?.classList.toggle('hidden', sichtbar > 0);
+    });
+  });
+</script>

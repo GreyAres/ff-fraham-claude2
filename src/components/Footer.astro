@@ -1,0 +1,36 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="bg-graphit text-white mt-24">
+  <div class="h-1.5 w-full bg-gradient-to-r from-feuerrot via-feuerrot-light to-feuerrot"></div>
+  <div class="max-w-6xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-3">
+    <div>
+      <p class="font-display text-2xl mb-3">FF <span class="text-feuerrot-light">Fraham</span></p>
+      <p class="text-sm text-white/70 leading-relaxed">
+        Freiwillige Feuerwehr Fraham<br />
+        4070 Fraham, Oberösterreich
+      </p>
+    </div>
+    <div>
+      <p class="font-display text-xl mb-3 text-feuerrot-light">Schnellzugriff</p>
+      <ul class="space-y-2 text-sm text-white/80">
+        <li><a class="hover:text-white" href="/einsaetze">Einsätze</a></li>
+        <li><a class="hover:text-white" href="/fuhrpark">Fuhrpark</a></li>
+        <li><a class="hover:text-white" href="/kontakt">Kontakt</a></li>
+        <li><a class="hover:text-white" href="/impressum">Impressum</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="font-display text-xl mb-3 text-feuerrot-light">Im Notfall</p>
+      <p class="text-sm text-white/80 leading-relaxed">
+        Feuerwehrnotruf <a href="tel:122" class="font-semibold text-white underline">122</a><br />
+        Rettung <a href="tel:144" class="hover:text-white">144</a> ·
+        Polizei <a href="tel:133" class="hover:text-white">133</a> ·
+        Euronotruf <a href="tel:112" class="hover:text-white">112</a>
+      </p>
+    </div>
+  </div>
+  <div class="border-t border-white/10 text-center text-xs text-white/50 py-4">
+    © {year} Freiwillige Feuerwehr Fraham
+  </div>
+</footer>

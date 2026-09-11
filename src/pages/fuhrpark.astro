@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FahrzeugCard from '../components/FahrzeugCard.astro';
+import { getCollection } from 'astro:content';
+
+const fahrzeuge = (await getCollection('fuhrpark')).sort(
+  (a, b) => a.data.reihenfolge - b.data.reihenfolge
+);
+---
+<BaseLayout title="Fuhrpark" description="Die Einsatzfahrzeuge der Freiwilligen Feuerwehr Fraham.">
+  <section class="max-w-6xl mx-auto px-4 py-16">
+    <h1 class="font-display text-4xl md:text-5xl mb-2">Unser Fuhrpark</h1>
+    <p class="text-graphit/70 mb-10 max-w-2xl">
+      Unsere Einsatzfahrzeuge sind das Rückgrat jedes Einsatzes – hier stellen wir sie im Detail vor.
+    </p>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {fahrzeuge.map((fahrzeug) => (
+        <FahrzeugCard
+          fahrzeugname={fahrzeug.data.fahrzeugname}
+          funkrufname={fahrzeug.data.funkrufname}
+          baujahr={fahrzeug.data.baujahr}
+          beschreibung={fahrzeug.data.beschreibung}
+          foto={fahrzeug.data.foto}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EinsatzCard from '../components/EinsatzCard.astro';
+import { getCollection } from 'astro:content';
+
+const alleEinsaetze = await getCollection('einsaetze');
+const neuesteEinsaetze = alleEinsaetze
+  .sort((a, b) => b.data.datum.valueOf() - a.data.datum.valueOf())
+  .slice(0, 3);
+---
+<BaseLayout title="Startseite">
+  <!-- Hero -->
+  <section class="relative bg-graphit text-white overflow-hidden">
+    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_20%_20%,#D32F2F,transparent_55%)]"></div>
+    <div class="relative max-w-6xl mx-auto px-4 py-20 md:py-28">
+      <p class="font-display text-feuerrot-light tracking-wide text-lg mb-3">Freiwillige Feuerwehr</p>
+      <h1 class="font-display text-5xl md:text-7xl leading-[0.95] max-w-2xl">
+        Wir schützen<br />Fraham. <span class="text-feuerrot-light">Rund&nbsp;um&nbsp;die&nbsp;Uhr.</span>
+      </h1>
+      <p class="mt-6 max-w-xl text-white/80 leading-relaxed">
+        Seit Generationen stehen wir für unsere Gemeinde bereit – bei Bränden, technischen
+        Notlagen und Katastrophen. Ehrenamtlich, ausgebildet und jederzeit einsatzbereit.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="/kontakt" class="bg-feuerrot hover:bg-feuerrot-dark transition-colors px-6 py-3 font-display text-lg rounded-sm">
+          Mitglied werden
+        </a>
+        <a href="/einsaetze" class="border border-white/30 hover:border-white transition-colors px-6 py-3 font-display text-lg rounded-sm">
+          Einsätze ansehen
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notfall Schnell-Info -->
+  <section class="bg-feuerrot text-white">
+    <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="font-display text-xl text-center sm:text-left">
+        Im Notfall zählt jede Sekunde – wähle sofort <span class="underline">122</span>.
+      </p>
+      <a href="tel:122" class="bg-white text-feuerrot font-display text-2xl px-6 py-2 rounded-sm shrink-0">
+        122 anrufen
+      </a>
+    </div>
+  </section>
+
+  <!-- Neueste Einsaetze -->
+  <section class="max-w-6xl mx-auto px-4 py-16">
+    <div class="flex items-end justify-between mb-8">
+      <h2 class="font-display text-3xl md:text-4xl">Aktuelle Einsätze</h2>
+      <a href="/einsaetze" class="text-feuerrot hover:text-feuerrot-dark font-display text-lg shrink-0">
+        Alle Einsätze
+      </a>
+    </div>
+    {neuesteEinsaetze.length > 0 ? (
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {neuesteEinsaetze.map((einsatz) => (
+          <EinsatzCard
+            slug={einsatz.slug}
+            title={einsatz.data.title}
+            datum={einsatz.data.datum}
+            einsatzart={einsatz.data.einsatzart}
+            beitragsbild={einsatz.data.beitragsbild}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="text-graphit/60">Aktuell sind keine Einsatzberichte veröffentlicht.</p>
+    )}
+  </section>
+
+  <!-- Quick Links -->
+  <section class="bg-graphit/[0.03] py-16">
+    <div class="max-w-6xl mx-auto px-4 grid gap-6 sm:grid-cols-2">
+      <a href="/kontakt" class="group block border border-graphit/10 hover:border-feuerrot bg-white p-8 rounded-sm transition-colors">
+        <h3 class="font-display text-2xl mb-2 group-hover:text-feuerrot transition-colors">Mitglied werden</h3>
+        <p class="text-graphit/70 leading-relaxed">
+          Werde Teil unserer Einsatzmannschaft und lerne Kameradschaft, Ausbildung und
+          echten Einsatz für deine Gemeinde kennen.
+        </p>
+      </a>
+      <a href="/kontakt" class="group block border border-graphit/10 hover:border-feuerrot bg-white p-8 rounded-sm transition-colors">
+        <h3 class="font-display text-2xl mb-2 group-hover:text-feuerrot transition-colors">Jugendfeuerwehr</h3>
+        <p class="text-graphit/70 leading-relaxed">
+          Schon ab 10 Jahren kannst du bei unserer Jugendgruppe mitmachen und spielerisch
+          erste Feuerwehrgrundlagen erlernen.
+        </p>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

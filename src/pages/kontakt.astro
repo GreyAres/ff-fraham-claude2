@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Kontakt" description="Kontaktiere die Freiwillige Feuerwehr Fraham oder werde Mitglied.">
+  <section class="max-w-4xl mx-auto px-4 py-16">
+    <h1 class="font-display text-4xl md:text-5xl mb-2">Kontakt</h1>
+    <p class="text-graphit/70 mb-10 max-w-2xl">
+      Hast du Fragen, möchtest Mitglied werden oder uns zu einer Veranstaltung einladen?
+      Wir freuen uns auf deine Nachricht.
+    </p>
+
+    <div class="grid gap-10 md:grid-cols-2">
+      <div>
+        <h2 class="font-display text-2xl mb-4">Feuerwehrhaus Fraham</h2>
+        <address class="not-italic text-graphit/80 leading-relaxed mb-6">
+          Freiwillige Feuerwehr Fraham<br />
+          Hauptstraße 1<br />
+          4070 Fraham<br />
+          Österreich
+        </address>
+        <p class="text-graphit/80 mb-2">
+          <strong>E-Mail:</strong> <a class="text-feuerrot hover:underline" href="mailto:info@ff-fraham.at">info@ff-fraham.at</a>
+        </p>
+        <p class="text-graphit/80 mb-6">
+          <strong>Kommando:</strong> <a class="text-feuerrot hover:underline" href="tel:+4372721234">07272 / 1234</a>
+        </p>
+        <div class="bg-feuerrot/5 border border-feuerrot/20 rounded-sm p-4">
+          <p class="font-display text-xl text-feuerrot">Im Notfall: 122</p>
+          <p class="text-sm text-graphit/70">Bitte ausschließlich für echte Notfälle verwenden.</p>
+        </div>
+      </div>
+
+      <form name="kontakt" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="space-y-4">
+        <input type="hidden" name="form-name" value="kontakt" />
+        <p class="hidden">
+          <label>Nicht ausfüllen: <input name="bot-field" /></label>
+        </p>
+
+        <div>
+          <label for="name" class="block text-sm font-medium mb-1">Name</label>
+          <input id="name" name="name" type="text" required class="w-full border border-graphit/20 rounded-sm px-3 py-2 focus:border-feuerrot" />
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium mb-1">E-Mail</label>
+          <input id="email" name="email" type="email" required class="w-full border border-graphit/20 rounded-sm px-3 py-2 focus:border-feuerrot" />
+        </div>
+        <div>
+          <label for="nachricht" class="block text-sm font-medium mb-1">Nachricht</label>
+          <textarea id="nachricht" name="nachricht" rows="5" required class="w-full border border-graphit/20 rounded-sm px-3 py-2 focus:border-feuerrot"></textarea>
+        </div>
+        <button type="submit" class="bg-feuerrot hover:bg-feuerrot-dark transition-colors text-white font-display text-lg px-6 py-3 rounded-sm">
+          Nachricht senden
+        </button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
